@@ -35,13 +35,12 @@ jobs:
         location: ${{ env.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
     # Build the Docker image
+    - uses: actions/checkout@v2
     - name: Build
-      run: |-
-        docker build -t us.gcr.io/$PROJECT_ID/$IMAGE .
+    - run: cd client && docker build -t us.gcr.io/$PROJECT_ID/client .
     # Push the Docker image to Google Container Registry
     - name: Publish
-      run: |-
-        docker push us.gcr.io/$PROJECT_ID/$IMAGE
+    - run: docker push us.gcr.io/$PROJECT_ID/client
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
