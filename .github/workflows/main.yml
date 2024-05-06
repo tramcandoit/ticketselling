@@ -9,10 +9,10 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: app-cluster    # Add your cluster name here.
-  GKE_ZONE: us-central1-c   # Add your cluster zone here.
-  DEPLOYMENT_NAME: client-depl # Add your deployment name here.
-  IMAGE: client
+  GKE_CLUSTER: 'app-cluster'    # Add your cluster name here.
+  GKE_ZONE: 'us-central1-c'   # Add your cluster zone here.
+  DEPLOYMENT_NAME: 'client-depl' # Add your deployment name here.
+  IMAGE: 'client'
 
 jobs:
   setup-build-publish-deploy:
