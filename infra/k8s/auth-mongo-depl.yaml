@@ -15,6 +15,13 @@ spec:
       containers:
         - name: auth-mongo
           image: mongo
+          volumeMounts:
+            - name: mongodb-data-auth
+              mountPath: /data/db
+      volumes:
+        - name: mongodb-data-auth
+          persistentVolumeClaim:
+            claimName: mongodb-pvc-auth
 ---
 apiVersion: v1
 kind: Service
