@@ -48,4 +48,4 @@ jobs:
        # chmod u+x ./kustomize
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
-      run: kubectl apply -f $DEPLOYMENT_NAME && kubectl rollout restart deployment client-depl
+      run: kubectl apply -f $DEPLOYMENT_NAME && kubectl rollout restart deployment client-depl --validate=false
