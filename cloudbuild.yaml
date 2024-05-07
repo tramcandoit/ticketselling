@@ -1,5 +1,5 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'us.gcr.io/t-system-422014-h3/ticketing-client'
   id: Build
   args:
   - 'build'
@@ -7,7 +7,7 @@ steps:
   - 'us.gcr.io/t-system-422014-h3/ticketing-client'
   - '.'
 
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'us.gcr.io/t-system-422014-h3/ticketing-client'
   id: Push
   args:
   - 'push'
