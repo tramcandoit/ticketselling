@@ -20,3 +20,6 @@ steps:
   - --image=us.gcr.io/t-system-422014-h3/ticketing-client
   - --location=${_CLOUDSDK_COMPUTE_ZONE}
   - --cluster=${_CLOUDSDK_CONTAINER_CLUSTER}
+
+options:
+  logging: CLOUD_LOGGING_ONLY
