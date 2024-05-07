@@ -36,7 +36,7 @@ router.post(
       throw new BadRequestError('Invalid Credentials');
     }
 
-    // Generate JWT
+    // Tạo JWT
     const userJwt = jwt.sign(
       {
         id: existingUser.id,
@@ -45,7 +45,7 @@ router.post(
       process.env.JWT_KEY!
     );
 
-    // Store it on session object
+    // Lưu trong session
     req.session = {
       jwt: userJwt
     };

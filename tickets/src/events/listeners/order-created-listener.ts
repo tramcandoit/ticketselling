@@ -9,18 +9,18 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
-    // Find the ticket that the order is reserving
+    // Tìm vé mà đơn hàng đang đặt
     const ticket = await Ticket.findById(data.ticket.id);
 
-    // If no ticket, throw error
+    // Nếu không có ticket thì error
     if (!ticket) {
       throw new Error('Ticket not found');
     }
 
-    // Mark the ticket as being reserved by setting its orderId property
+    // Đánh dấu vé là được reserve bằng cách đặt thuộc tính orderId của ticket
     ticket.set({ orderId: data.id });
 
-    // Save the ticket
+    // Lưu vé
     await ticket.save();
     await new TicketUpdatedPublisher(this.client).publish({
       id: ticket.id,
@@ -31,7 +31,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       version: ticket.version,
     });
 
-    // ack the message
+    // ack message
     msg.ack();
   }
 }

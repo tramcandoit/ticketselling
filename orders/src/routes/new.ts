@@ -31,23 +31,23 @@ router.post(
   async (req: Request, res: Response) => {
     const { ticketId } = req.body;
 
-    // Find the ticket the user is trying to order in the database
+    // Tìm ticket trong database
     const ticket = await Ticket.findById(ticketId);
     if (!ticket) {
       throw new NotFoundError();
     }
 
-    // Make sure that this ticket is not already reserved
+    // Kiểm tra ticket có bị reserved hay không
     const isReserved = await ticket.isReserved();
     if (isReserved) {
       throw new BadRequestError('Ticket is already reserved');
     }
 
-    // Calculate an expiration date for this order
+    // Tính thời gian hết hạn của order
     const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
-    // Build the order and save it to the database
+    // Tạo order và lưu vào database
     const order = Order.build({
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
@@ -56,7 +56,7 @@ router.post(
     });
     await order.save();
 
-    // Publish an event saying that an order was created
+    // Publish event order created
     new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
       version: order.version,
