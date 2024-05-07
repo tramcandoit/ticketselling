@@ -28,6 +28,7 @@ jobs:
     # helper for authentication
     - run: |-
         gcloud --quiet auth configure-docker
+        gcloud components install kubectl
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
       with:
@@ -37,21 +38,21 @@ jobs:
     # Build the Docker image
     - uses: actions/checkout@v2
     - name: Build
-      run: cd client && docker build -t us.gcr.io/$PROJECT_ID/$IMAGE .
+      run: cd client && docker build -t us.gcr.io-docker.pkg.dev/$PROJECT_ID/$IMAGE .
     # Push the Docker image to Google Container Registry
     - name: Publish
-      run: docker push us.gcr.io/$PROJECT_ID/client
+      run: docker push us.gcr.io-docker.pkg.dev/$PROJECT_ID/$IMAGE
     # Set up kustomize
-    - name: Set up Kustomize
-      run: |-
-        curl -sfLo kustomize_v4.0.1_linux_amd64.tar.gz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.0.1/kustomize_v4.0.1_linux_amd64.tar.gz
-        tar -zxf kustomize_v4.0.1_linux_amd64.tar.gz
-        chmod u+x ./kustomize
-        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-        chmod u+x ./kubectl
+   # - name: Set up Kustomize
+    #  run: |-
+     #   curl -sfLo kustomize_v4.0.1_linux_amd64.tar.gz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.0.1/kustomize_v4.0.1_linux_amd64.tar.gz
+      #  tar -zxf kustomize_v4.0.1_linux_amd64.tar.gz
+       # chmod u+x ./kustomize
+        #curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        #chmod u+x ./kubectl
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
-      run: |-
-        ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
-        kubectl get services -o wide   
+      run: kubectl apply -f /client-depl.yaml
+       # ./kustomize build . | kubectl apply -f -
+        #kubectl rollout status deployment/$DEPLOYMENT_NAME
+        #kubectl get services -o wide   
