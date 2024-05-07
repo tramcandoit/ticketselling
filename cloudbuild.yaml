@@ -1,6 +1,11 @@
 #Build the image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us.gcr.io/t-system-422014-h3/ticketing-client', '.']
+steps:
+- name: "gcr.io/cloud-builders/docker"
+  args:
+  - build
+  - "--tag=us.gcr.io/t-system-422014-h3/ticketing-client"
+  - "--file=/client/Dockerfile"
+  - .
 
 #Push the image
 - name: 'gcr.io/cloud-builders/docker'
