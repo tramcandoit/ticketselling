@@ -9,7 +9,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: app-cluster    # Add your cluster name here.
   GKE_ZONE: us-central1-c   # Add your cluster zone here.
-  DEPLOYMENT_NAME: infra/k8s/client-depl.yaml # Add your deployment name here.
+  DEPLOYMENT_NAME: ./client-depl.yaml # Add your deployment name here.
   IMAGE: client
 jobs:
   setup-build-publish-deploy:
