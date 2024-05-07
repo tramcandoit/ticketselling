@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: us.gcr.io/t-system-422014-h3/ticketing-client
+          image: us.gcr.io-docker.pkg.dev/t-system-422014-h3/ticketing-client
 ---
 apiVersion: v1
 kind: Service
