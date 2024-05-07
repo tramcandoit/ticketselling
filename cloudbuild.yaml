@@ -1,25 +1,26 @@
 steps:
-- name: 'us.gcr.io/t-system-422014-h3/ticketing-client'
-  id: Build
-  args:
-  - 'build'
-  - '-t'
-  - 'us.gcr.io/t-system-422014-h3/ticketing-client'
-  - '.'
 
-- name: 'us.gcr.io/t-system-422014-h3/ticketing-client'
-  id: Push
-  args:
-  - 'push'
-  - 'us.gcr.io/t-system-422014-h3/ticketing-client'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '.', '-t', 'us.gcr.io/t-system-422014-h3/ticketing-client:${COMMIT_SHA}', '-f', 'client/Dockerfile']
 
-- name: "gcr.io/cloud-builders/gke-deploy"
+
+# Push the container image
+
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us.gcr.io/t-system-422014-h3/ticketing-client:${COMMIT_SHA}']
+# Create release in Google Cloud Deploy
+
+
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  entrypoint: gcloud
   args:
-  - run
-  - --filename=infra/k8s/client-depl.yaml
-  - --image=us.gcr.io/t-system-422014-h3/ticketing-client
-  - --location=${_CLOUDSDK_COMPUTE_ZONE}
-  - --cluster=${_CLOUDSDK_CONTAINER_CLUSTER}
+    [
+      "deploy", "releases", "create", "rel-${SHORT_SHA}",
+      "--delivery-pipeline", "gitops",
+      "--region", "asia-east1",
+      "--images", "image=us.gcr.io/t-system-422014-h3/ticketing-client:${COMMIT_SHA}"
+    ]
 
 options:
   logging: CLOUD_LOGGING_ONLY
