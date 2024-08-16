@@ -1,3 +1,4 @@
+###### this is from Github
 # Ticket selling app
 
 Đây là repository của ứng dụng microservices Ticket selling. Mục đích là demo các tính năng của Kubernetes phục vụ đồ án môn học Quản trị mạng và hệ thống.
