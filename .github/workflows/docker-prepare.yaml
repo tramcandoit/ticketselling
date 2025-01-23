@@ -15,19 +15,31 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v3
 
-      - name: build docker image
+      # - name: build docker image
+      #   run: |
+      #     cd ./auth
+      #     docker build -t auth:1.0.0 .
+
+      # - name: scan docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'auth:1.0.0'
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+
+      - name: Build vulnerable Docker image
         run: |
-          cd ./auth
-          docker build -t auth:1.0.0 .
+          docker pull vulnerables/web-dvwa:latest
+          docker tag vulnerables/web-dvwa:latest auth:1.0.0
 
       - name: scan docker image
         uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'auth:1.0.0'
           format: 'sarif'
-          output: 'trivy-results.sarif'
+          output: 'trivy-results-test.sarif'
 
       - name: upload trivy report
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy-results-test.sarif'
