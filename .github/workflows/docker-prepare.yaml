@@ -1,0 +1,30 @@
+name: Docker Prepare
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docker-prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: build docker image
+        run: |
+          cd ./auth
+          docker build -t auth:1.0.0 .
+
+      - name: scan docker image
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: 'auth:1.0.0'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: upload trivy report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
