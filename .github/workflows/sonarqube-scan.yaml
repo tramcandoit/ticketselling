@@ -1,0 +1,20 @@
+name: SonarQube Scan
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  sonarqube-scan:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Scanning
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets. SONAR_HOST_URL}}
+      with:
+        args: >
+          -Dsonar.projectKey=ticketing
